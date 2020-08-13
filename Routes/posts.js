@@ -31,8 +31,31 @@ router.post("/add-post", async (req, res) => {
 
 
 /*=======================PUTROUTE HERE========================= */
+router.put("/edit-post/:id", async (req, res) => {
+    try {
+        let updatePost = Post.findByIdAndUpdate(req.params.id, {
+            title: req.body.title,
+            details: req.body.details,
+        }, { new: true });
+        //save or update into database
+        await (await updatePost).save();
+        return res.status(201).json({ msg: "succesfully posts updated" });
+    } catch (err) {
+        console.log(err);
+        res.status(500).json("SERVER ERROR");
+    }
+});
+
+
 
 /*=======================DELETEROUTE HERE========================= */
-
+router.delete("/delete-post/:id", async (req, res) => {
+    try {
+        await Post.findByIdAndDelete({ _id: req.params.id });
+        return res.status(201).json({ msg: "successfully post deleted" });
+    } catch (err) {
+        console.log(err);
+    }
+})
 
 module.exports = router;
